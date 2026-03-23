@@ -352,11 +352,12 @@ df_sinan_completo <- df_sinan_completo %>%
 
 df_sinan_completo <- process_sinan_dengue(df_sinan_completo)
 
-arquivo_sinan_completo <- gerar_nome_arquivo(
-  sistema = sistema_sinan,
-  uf = uf_download,
-  ano = ano_download,
-  tipo = "completo"
+arquivo_sinan_completo <- paste(
+  sistema_sinan,
+  uf_download,
+  ano_download,
+  "completo.csv",
+  sep = "_"
 )
 
 caminho_sinan_completo <- file.path(pastas_sistemas[[sistema_sinan]], arquivo_sinan_completo)
@@ -368,11 +369,12 @@ glimpse(df_sinan_completo)
 df_sinan_variaveis <- df_sinan_completo %>%
   select(any_of(c("TP_NOT", "ID_AGRAVO", "DT_NOTIFIC", "ANO_NASC", "IDADEanos")))
 
-arquivo_sinan_variaveis <- gerar_nome_arquivo(
-  sistema = sistema_sinan,
-  uf = uf_download,
-  ano = ano_download,
-  tipo = "variaveis"
+arquivo_sinan_variaveis <- paste(
+  sistema_sinan,
+  uf_download,
+  ano_download,
+  "variaveis.csv",
+  sep = "_"
 )
 
 caminho_sinan_variaveis <- file.path(pastas_sistemas[[sistema_sinan]], arquivo_sinan_variaveis)
