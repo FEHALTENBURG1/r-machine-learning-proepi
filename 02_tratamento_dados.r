@@ -1,6 +1,11 @@
 # ==============================================================================
 # AULA 2 - TRATAMENTO DE DADOS
 # Curso: Analise de Dados e Machine Learning com R - ProEpi 2026
+# ------------------------------------------------------------------------------
+# Objetivo geral da aula:
+# - Padronizar os dados dos sistemas de informacao em tipos adequados para analise.
+# - Aplicar tratamento de outliers e valores ausentes de forma didatica.
+# - Salvar uma base tratada por sistema para uso na aula de analise exploratoria.
 # ==============================================================================
 
 # Instala tidyverse se necessario para leitura, transformacao e graficos.
@@ -20,7 +25,11 @@ raiz_dados_processados <- "dados_processados_datasus"
 dir.create(raiz_dados_processados, recursive = TRUE, showWarnings = FALSE)
 
 # ------------------------------------------------------------------------------
-# SESSAO 1 - SIA
+# SESSAO 1 - SISTEMA DE INFORMACOES AMBULATORIAIS (SIA)
+# Objetivo da sessao:
+# - Importar e padronizar tipos de variaveis do SIA.
+# - Tratar outliers e valores ausentes com tecnicas didaticas.
+# - Salvar o arquivo final do SIA para modelagem.
 # ------------------------------------------------------------------------------
 
 # Importa o arquivo do SIA.
@@ -43,11 +52,11 @@ df_sia_variaveis <- df_sia_variaveis %>%
     AP_CNSPCN = as.character(AP_CNSPCN), # Mantem CNS como texto.
     AP_MVM = ymd(paste0(str_pad(as.character(AP_MVM), width = 6, side = "left", pad = "0"), "01")), # Converte YYYYMM para Date (dia 01).
     AP_NUIDADE = as.integer(AP_NUIDADE), # Converte para inteiro.
-    AP_SEXO = case_when(AP_SEXO %in% c("M", "1", 1) ~ 1L, AP_SEXO %in% c("F", "2", 2) ~ 2L, TRUE ~ NA_integer_), # Recodifica sexo para inteiro.
-    AP_RACACOR = as.integer(AP_RACACOR), # Converte para inteiro.
-    AP_OBITO = as.integer(AP_OBITO), # Converte indicador para inteiro.
-    AP_ENCERR = as.integer(AP_ENCERR), # Converte indicador para inteiro.
-    AM_TRANSPL = case_when(AM_TRANSPL == "S" ~ 1L, AM_TRANSPL == "N" ~ 0L, TRUE ~ NA_integer_), # Recodifica transplantado.
+    AP_SEXO = factor(case_when(AP_SEXO %in% c("M", "1", 1) ~ 1L, AP_SEXO %in% c("F", "2", 2) ~ 2L, TRUE ~ NA_integer_), levels = c(1L, 2L), labels = c("Masculino", "Feminino")), # Recodifica sexo para fator nominal.
+    AP_RACACOR = as.factor(AP_RACACOR), # Converte raca/cor para fator nominal.
+    AP_OBITO = factor(as.integer(AP_OBITO), levels = c(0L, 1L), labels = c("Nao", "Sim")), # Converte obito para fator nominal binario.
+    AP_ENCERR = factor(as.integer(AP_ENCERR), levels = c(0L, 1L), labels = c("Nao", "Sim")), # Converte encerramento para fator nominal binario.
+    AM_TRANSPL = factor(case_when(AM_TRANSPL == "S" ~ 1L, AM_TRANSPL == "N" ~ 0L, TRUE ~ NA_integer_), levels = c(0L, 1L), labels = c("Nao", "Sim")), # Recodifica transplante para fator nominal binario.
     AP_CIDPRI = as.factor(AP_CIDPRI) # Converte CID principal para fator nominal.
   )
 
@@ -68,7 +77,11 @@ df_sia_modelagem <- df_sia_variaveis
 save(df_sia_modelagem, file = file.path(raiz_dados_processados, "sia_modelagem.RData"))
 
 # ------------------------------------------------------------------------------
-# SESSAO 2 - SIH
+# SESSAO 2 - SISTEMA DE INFORMACOES HOSPITALARES (SIH)
+# Objetivo da sessao:
+# - Importar e padronizar tipos de variaveis do SIH.
+# - Comparar e aplicar tecnicas de tratamento de outliers e missing values.
+# - Salvar o arquivo final do SIH para modelagem.
 # ------------------------------------------------------------------------------
 
 # Importa o arquivo do SIH.
@@ -88,15 +101,12 @@ df_sih_variaveis <- df_sih_variaveis %>%
     DIAG_PRINC = as.factor(DIAG_PRINC), # Converte para fator nominal.
     QT_DIARIAS = as.numeric(QT_DIARIAS), # Converte para float.
     NASC = as.Date(NASC), # Converte para Date.
-    SEXO = case_when(SEXO %in% c("Masculino", "M", "1", 1) ~ 1L, SEXO %in% c("Feminino", "F", "2", 2) ~ 2L, TRUE ~ NA_integer_), # Recodifica sexo.
-    MORTE = case_when(MORTE %in% c("Sim", "1", 1) ~ 1L, MORTE %in% c("Nao", "Não", "0", 0) ~ 0L, TRUE ~ NA_integer_), # Recodifica obito.
+    SEXO = factor(case_when(SEXO %in% c("Masculino", "M", "1", 1) ~ "Masculino", SEXO %in% c("Feminino", "F", "2", 2) ~ "Feminino", TRUE ~ NA_character_), levels = c("Masculino", "Feminino")), # Recodifica sexo para fator nominal.
+    MORTE = factor(case_when(MORTE %in% c("Sim", "1", 1) ~ 1L, MORTE %in% c("Nao", "Não", "0", 0) ~ 0L, TRUE ~ NA_integer_), levels = c(0L, 1L), labels = c("Nao", "Sim")), # Recodifica obito para fator nominal binario.
     VAL_SH = parse_number(as.character(VAL_SH), locale = locale(decimal_mark = ".")), # Converte para float.
     VAL_SP = parse_number(as.character(VAL_SP), locale = locale(decimal_mark = ".")), # Converte para float.
     VAL_TOT = parse_number(as.character(VAL_TOT), locale = locale(decimal_mark = ".")) # Converte para float.
   )
-
-# Converte sexo para fator ordinal.
-df_sih_variaveis <- df_sih_variaveis %>% mutate(SEXO = factor(SEXO, levels = c(1L, 2L), ordered = TRUE))
 
 # Outliers: identifica variaveis numericas.
 numericas_sih <- names(df_sih_variaveis)[sapply(df_sih_variaveis, is.numeric)]
@@ -184,7 +194,11 @@ df_sih_modelagem <- df_sih_variaveis
 save(df_sih_modelagem, file = file.path(raiz_dados_processados, "sih_modelagem.RData"))
 
 # ------------------------------------------------------------------------------
-# SESSAO 3 - SIM
+# SESSAO 3 - SISTEMA DE INFORMACOES SOBRE MORTALIDADE (SIM)
+# Objetivo da sessao:
+# - Importar e padronizar tipos de variaveis do SIM.
+# - Validar variaveis de idade e aplicar tratamento de outliers/missing.
+# - Salvar o arquivo final do SIM para modelagem.
 # ------------------------------------------------------------------------------
 
 # Importa o arquivo do SIM.
@@ -197,11 +211,11 @@ glimpse(df_sim_variaveis)
 # Converte e padroniza tipos principais do SIM.
 df_sim_variaveis <- df_sim_variaveis %>%
   mutate(
-    ORIGEM = as.integer(ORIGEM), # Converte para inteiro.
+    ORIGEM = as.factor(ORIGEM), # Converte para fator nominal.
     TIPOBITO = as.factor(TIPOBITO), # Converte para fator nominal.
     DTNASC = as.Date(DTNASC), # Converte para Date.
     IDADE = as.integer(IDADE), # Converte para inteiro.
-    RACACOR = case_when(RACACOR == "Branca" ~ 1L, RACACOR == "Preta" ~ 2L, RACACOR == "Amarela" ~ 3L, RACACOR == "Parda" ~ 4L, RACACOR == "Indígena" ~ 5L, TRUE ~ NA_integer_), # Recodifica raca/cor.
+    RACACOR = factor(case_when(RACACOR == "Branca" ~ 1L, RACACOR == "Preta" ~ 2L, RACACOR == "Amarela" ~ 3L, RACACOR == "Parda" ~ 4L, RACACOR == "Indígena" ~ 5L, TRUE ~ NA_integer_), levels = c(1L, 2L, 3L, 4L, 5L), labels = c("Branca", "Preta", "Amarela", "Parda", "Indigena")), # Recodifica raca/cor para fator nominal.
     ESCMAE = factor(ESCMAE, levels = c("Nenhuma", "1 a 3 anos", "4 a 7 anos", "8 a 11 anos", "12 anos ou mais"), ordered = TRUE), # Fator ordinal.
     PARTO = factor(PARTO, levels = c("Vaginal", "Cesáreo")), # Fator nominal.
     GRAVIDEZ = factor(GRAVIDEZ, levels = c("única", "Dupla", "Tríplice e mais")), # Fator nominal.
@@ -272,6 +286,7 @@ if ("DTNASC" %in% names(df_sim_variaveis)) {
   if ("IDADE" %in% names(df_sim_variaveis)) {
     df_sim_variaveis <- df_sim_variaveis %>%
       mutate(
+        IDADE = suppressWarnings(as.integer(readr::parse_number(as.character(IDADE)))), # Garante IDADE como inteiro para evitar conflito de tipo.
         IDADE_calculada = as.integer(floor(as.numeric(data_evento_sim - DTNASC) / 365.25)),
         IDADE = if_else(!is.na(IDADE) & !is.na(IDADE_calculada) & IDADE != IDADE_calculada, IDADE_calculada, IDADE)
       )
@@ -301,7 +316,11 @@ df_sim_modelagem <- df_sim_variaveis
 save(df_sim_modelagem, file = file.path(raiz_dados_processados, "sim_modelagem.RData"))
 
 # ------------------------------------------------------------------------------
-# SESSAO 4 - SINAN
+# SESSAO 4 - SISTEMA DE INFORMACAO DE AGRAVOS DE NOTIFICACAO (SINAN)
+# Objetivo da sessao:
+# - Importar e padronizar tipos de variaveis do SINAN.
+# - Tratar outliers, incluindo validacao de idade calculada por data.
+# - Salvar o arquivo final do SINAN para modelagem.
 # ------------------------------------------------------------------------------
 
 # Importa o arquivo do SINAN.
@@ -314,13 +333,11 @@ glimpse(df_sinan_variaveis)
 # Converte e padroniza tipos principais do SINAN.
 df_sinan_variaveis <- df_sinan_variaveis %>%
   mutate(
-    TP_NOT_num = suppressWarnings(readr::parse_number(as.character(TP_NOT))), # Extrai parte numerica sem gerar warning.
-    TP_NOT = if_else(!is.na(TP_NOT_num), as.integer(TP_NOT_num), as.integer(as.factor(as.character(TP_NOT)))), # Se nao houver numero, codifica categoria em inteiro.
-    ID_AGRAVO = as.factor(ID_AGRAVO), # Converte para fator nominal.
+    TP_NOT = as.character(TP_NOT), # Mantem tipo de notificacao como texto.
+    ID_AGRAVO = as.character(ID_AGRAVO), # Mantem identificador como texto.
     DT_NOTIFIC = as.Date(DT_NOTIFIC), # Converte para Date.
     ANO_NASC = as.integer(ANO_NASC) # Converte para inteiro.
-  ) %>%
-  select(-TP_NOT_num)
+  )
 
 # Outliers: identifica variaveis numericas.
 numericas_sinan <- names(df_sinan_variaveis)[sapply(df_sinan_variaveis, is.numeric)]
@@ -410,7 +427,11 @@ df_sinan_modelagem <- df_sinan_variaveis
 save(df_sinan_modelagem, file = file.path(raiz_dados_processados, "sinan_modelagem.RData"))
 
 # ------------------------------------------------------------------------------
-# SESSAO 5 - SINASC
+# SESSAO 5 - SISTEMA DE INFORMACOES SOBRE NASCIDOS VIVOS (SINASC)
+# Objetivo da sessao:
+# - Importar e padronizar tipos de variaveis do SINASC.
+# - Tratar outliers e valores ausentes mantendo consistencia dos dados.
+# - Salvar o arquivo final do SINASC para modelagem.
 # ------------------------------------------------------------------------------
 
 # Importa o arquivo do SINASC.
@@ -428,12 +449,12 @@ df_sinasc_variaveis <- df_sinasc_variaveis %>%
   mutate(
     CODMUNNASC = str_pad(as.character(CODMUNNASC), width = max_digitos_codmunnasc, side = "left", pad = "0"), # ID em texto com zero a esquerda.
     IDADEMAE = as.integer(IDADEMAE), # Converte para inteiro.
-    PARTO = case_when(PARTO == "Vaginal" ~ 1L, PARTO == "Cesáreo" ~ 2L, TRUE ~ NA_integer_), # Recodifica parto.
+    PARTO = factor(case_when(PARTO == "Vaginal" ~ 1L, PARTO == "Cesáreo" ~ 2L, TRUE ~ NA_integer_), levels = c(1L, 2L), labels = c("Vaginal", "Cesareo")), # Recodifica parto para fator nominal binario.
     ESCMAE = factor(ESCMAE, levels = c("Nenhum", "1 a 3 anos", "4 a 7 anos", "8 a 11 anos", "12 anos ou mais"), ordered = TRUE), # Fator ordinal.
     QTDFILVIVO = as.integer(QTDFILVIVO), # Converte para inteiro.
     CONSULTAS = factor(CONSULTAS, levels = c("Nenhuma", "1 a 3 vezes", "4 a 6 vezes", "7 ou mais vezes"), ordered = TRUE), # Fator ordinal.
     SERIESCMAE = factor(as.integer(SERIESCMAE), levels = sort(unique(as.integer(SERIESCMAE))), ordered = TRUE), # Fator ordinal.
-    RACACORMAE = case_when(RACACORMAE == "Branca" ~ 1L, RACACORMAE == "Preta" ~ 2L, RACACORMAE == "Amarela" ~ 3L, RACACORMAE == "Parda" ~ 4L, RACACORMAE == "Indígena" ~ 5L, TRUE ~ NA_integer_), # Recodifica raca/cor.
+    RACACORMAE = factor(case_when(RACACORMAE == "Branca" ~ 1L, RACACORMAE == "Preta" ~ 2L, RACACORMAE == "Amarela" ~ 3L, RACACORMAE == "Parda" ~ 4L, RACACORMAE == "Indígena" ~ 5L, TRUE ~ NA_integer_), levels = c(1L, 2L, 3L, 4L, 5L), labels = c("Branca", "Preta", "Amarela", "Parda", "Indigena")), # Recodifica raca/cor para fator nominal.
     ESTCIVMAE = as.factor(ESTCIVMAE), # Fator nominal.
     APGAR1 = factor(as.integer(APGAR1), levels = 0:10, ordered = TRUE), # Fator ordinal.
     APGAR5 = factor(as.integer(APGAR5), levels = 0:10, ordered = TRUE) # Fator ordinal.
@@ -530,4 +551,3 @@ for (coluna in numericas_sinasc) df_sinasc_variaveis[[coluna]][is.na(df_sinasc_v
 df_sinasc_modelagem <- df_sinasc_variaveis
 # Salva SINASC em RData.
 save(df_sinasc_modelagem, file = file.path(raiz_dados_processados, "sinasc_modelagem.RData"))
-
