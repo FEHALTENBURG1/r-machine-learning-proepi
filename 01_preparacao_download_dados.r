@@ -120,7 +120,7 @@ print(head(df_sinasc_variaveis))
 glimpse(df_sinasc_variaveis)
 
 # ------------------------------------------------------------------------------
-# SESSAO 3 - DOWNLOAD SIM (DF, 2024-06)
+# SESSAO 3 - DOWNLOAD SIM (DF, 2024)
 # ------------------------------------------------------------------------------
 sistema_sim <- "sim"
 codigo_sim <- "SIM-DO"
@@ -128,8 +128,6 @@ codigo_sim <- "SIM-DO"
 df_sim_completo <- fetch_datasus(
   year_start = ano_download,
   year_end = ano_download,
-  month_start = mes_download,
-  month_end = mes_download,
   uf = uf_download,
   information_system = codigo_sim
 )
@@ -140,7 +138,7 @@ arquivo_sim_completo <- gerar_nome_arquivo(
   sistema = sistema_sim,
   uf = uf_download,
   ano = ano_download,
-  mes = mes_download,
+  mes = NULL,
   tipo = "completo"
 )
 
@@ -166,8 +164,6 @@ variaveis_sim <- c(
 df_sim_variaveis <- fetch_datasus(
   year_start = ano_download,
   year_end = ano_download,
-  month_start = mes_download,
-  month_end = mes_download,
   uf = uf_download,
   information_system = codigo_sim,
   vars = variaveis_sim
@@ -179,7 +175,7 @@ arquivo_sim_variaveis <- gerar_nome_arquivo(
   sistema = sistema_sim,
   uf = uf_download,
   ano = ano_download,
-  mes = mes_download,
+  mes = NULL,
   tipo = "variaveis"
 )
 caminho_sim_variaveis <- file.path(pastas_sistemas[[sistema_sim]], arquivo_sim_variaveis)
@@ -219,6 +215,7 @@ glimpse(df_sia_completo)
 
 # Download de variaveis do SIA-AM para 2023-2024 (todos os meses).
 variaveis_sia <- c(
+  "AP_MVM",
   "AP_AUTORIZ",
   "AP_CODUNI",
   "AP_CNSPCN",
@@ -367,7 +364,7 @@ print(head(df_sinan_completo))
 glimpse(df_sinan_completo)
 
 df_sinan_variaveis <- df_sinan_completo %>%
-  select(any_of(c("TP_NOT", "ID_AGRAVO", "DT_NOTIFIC", "ANO_NASC", "IDADEanos")))
+  select(any_of(c("DT_SIN_PRI", "DT_NOTIFIC", "TP_NOT", "ID_AGRAVO", "DT_NOTIFIC", "ANO_NASC", "IDADEanos")))
 
 arquivo_sinan_variaveis <- paste(
   sistema_sinan,
