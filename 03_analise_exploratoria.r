@@ -41,7 +41,6 @@ dim(df_sih_modelagem)
 
 # 1) Analise de frequencia absoluta e relativa para variaveis categoricas.
 categoricas_sinasc <- names(df_sinasc_modelagem)[sapply(df_sinasc_modelagem, function(x) is.factor(x) || is.character(x))]
-categoricas_sinasc <- categoricas_sinasc[!str_detect(str_to_lower(categoricas_sinasc), padrao_excluir_cid_causa)]
 
 if (length(categoricas_sinasc) > 0) {
   tabela_freq_abs_sinasc <- df_sinasc_modelagem %>%
