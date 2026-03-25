@@ -31,6 +31,7 @@ dim(df_sinasc_modelagem)
 dim(df_sim_modelagem)
 dim(df_sia_modelagem)
 dim(df_sih_modelagem)
+dim(df_sinan_modelagem)
 # ------------------------------------------------------------------------------
 # SESSAO 2 - SISTEMA DE INFORMACOES SOBRE NASCIDOS VIVOS (SINASC)
 # Objetivo da sessao:
