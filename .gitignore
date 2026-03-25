@@ -5,3 +5,7 @@
 /dados_originais_datasus/sinasc/
 /dados_processados_datasus
 .Rproj.user
+
+.Rproj.user/
+.DS_Store
+**/.DS_Store
