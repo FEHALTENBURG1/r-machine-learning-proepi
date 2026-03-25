@@ -1,5 +1,5 @@
 # ==============================================================================
-# AULA 4 - INTRODUCAO A TESTES DE HIPOTESE
+# AULA 4 - INTRODUCAO A TESTES DE HIPOTESE - BRASIL
 # Curso: Analise de Dados e Machine Learning com R - ProEpi 2026
 # ------------------------------------------------------------------------------
 # Objetivo geral da aula:

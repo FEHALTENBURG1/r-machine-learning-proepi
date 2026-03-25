@@ -1,5 +1,5 @@
 # ==============================================================================
-# AULA 2 - TRATAMENTO DE DADOS
+# AULA 2 - TRATAMENTO DE DADOS - BRASIL
 # Curso: Analise de Dados e Machine Learning com R - ProEpi 2026
 # ------------------------------------------------------------------------------
 # Objetivo geral da aula:

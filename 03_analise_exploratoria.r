@@ -1,5 +1,5 @@
 # ==============================================================================
-# AULA 3 - ANALISE EXPLORATORIA
+# AULA 3 - ANALISE EXPLORATORIA - BRASIL
 # Curso: Analise de Dados e Machine Learning com R - ProEpi 2026
 # ------------------------------------------------------------------------------
 # Objetivo geral da aula:

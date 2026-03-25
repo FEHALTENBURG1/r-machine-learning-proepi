@@ -1,5 +1,5 @@
 # ==============================================================================
-# AULA 1 - PREPARACAO DO R E ACESSO INICIAL AOS DADOS DO SUS
+# AULA 1 - PREPARACAO DO R E ACESSO INICIAL AOS DADOS DO SUS - BRASIL
 # Curso: Analise de Dados e Machine Learning com R - ProEpi 2026
 # ------------------------------------------------------------------------------
 # Objetivo geral da aula:
