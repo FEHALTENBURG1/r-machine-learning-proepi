@@ -52,6 +52,15 @@ salvar_grafico <- function(grafico, nome_arquivo, largura = 10, altura = 6) {
 # - Construir base diaria de internacoes e avaliar pressupostos da Poisson.
 # - Treinar modelo Poisson e testar formalmente overdispersao.
 # - Com overdispersao, adotar Binomial Negativa como modelo oficial.
+#
+# Pressupostos:
+# - Variável resposta é uma contagem (números inteiros)
+# - Independência das observações
+# - Equidispersão (Alternativas: 
+# 1.Quase Poisson: adiciona um "parâmetro de 
+# dispersão" ao modelo de Poisson para corrigir os erros padrão; 
+# 2. Binomial Negativo: adiciona um termo extra de erro ao modelo 
+# para modelar a heterogeneidade não observada de forma explícita.)
 # ------------------------------------------------------------------------------
 
 # Importa base tratada do SIH.
@@ -144,6 +153,16 @@ summary(modelo_poisson)
 teste_overdispersao <- AER::dispersiontest(modelo_poisson)
 cat("\nTeste de overdispersao (Poisson):\n")
 print(teste_overdispersao)
+
+# -- Como tratar overdispersão --#
+# 1. Se o parâmetro for próximo a 1: Temos equidispersão. O modelo de Poisson 
+# é perfeito para os dados.
+# 2. Se o parâmetro for maior que 1 (ex: 1.5, 2.0, etc.): Temos overdispersão (superdispersão). 
+# Como vimos, a variância é maior que a média, e você deve migrar para o 
+# modelo Binomial Negativo ou Quase-Poisson.
+# 3. Se o parâmetro for menor que 1: Temos underdispersão (subdispersão). Isso é bem mais raro, 
+# mas significa que a variância é menor que a média. (Nesses casos, modelos como Regressão de 
+# Poisson Generalizada ou Conway-Maxwell-Poisson são utilizados).
 
 # Treina modelos alternativos para comparacao didatica.
 modelo_quasipoisson <- glm(
@@ -465,3 +484,4 @@ conteudo_md_summaries <- c(
   "```"
 )
 writeLines(conteudo_md_summaries, file.path(pasta_saida_modelos, "summaries_modelos_aula7.md"))
+

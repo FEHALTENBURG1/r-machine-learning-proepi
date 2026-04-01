@@ -443,7 +443,7 @@ grafico_densidade_residuos_modelos <- resultados_teste %>%
 print(grafico_densidade_residuos_modelos)
 salvar_grafico(grafico_densidade_residuos_modelos, "09_densidade_residuos_modelos_teste.png")
 
-# Grafico de linhas da target original separando treino e teste.
+# Grafico de linhas da target original separando treino e teste.#CORRIGIR
 dados_linha_target <- bind_rows(
   dados_treino %>% transmute(indice = row_number(), conjunto = "Treino", target = VAL_TOT),
   dados_teste %>% transmute(indice = row_number(), conjunto = "Teste", target = VAL_TOT)

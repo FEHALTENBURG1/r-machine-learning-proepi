@@ -1,0 +1,7 @@
+TARGET_FATOR,frequencia,percentual,tipo_base
+0,10588,95.66317311167329,Treino_Original
+1,480,4.336826888326708,Treino_Original
+0,480,50,Treino_Undersample
+1,480,50,Treino_Undersample
+0,10588,50,Treino_Uppersample
+1,10588,50,Treino_Uppersample

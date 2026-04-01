@@ -1,0 +1,4 @@
+Modelo,Precision,Recall,Accuracy
+Regressao_Logistica_Stepwise_Oficial,0.04771273979340875,0.47783251231527096,0.5695615514333895
+Regressao_Logistica_Completa,0.04815864022662889,0.5024630541871922,0.553752107925801
+Arvore_Decisao_Treino_Original,NA,0,0.9572091062394603
