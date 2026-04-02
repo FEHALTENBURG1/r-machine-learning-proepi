@@ -389,7 +389,7 @@ salvar_grafico(grafico_km_faixa_etaria$plot, "07_km_por_faixa_etaria.png", largu
 # - Usamos a base completa para foco em inferencia dos Hazard Ratios.
 # - Em cenarios de predicao operacional, treino/teste pode ser adotado.
 modelo_cox <- coxph(
-  Surv(TEMPO_TRAT_DIAS, EVENTO_TRAT) ~ FAIXA_ETARIA + AP_SEXO + AP_RACACOR + AM_TRANSPL + AP_CIDPRI,
+  Surv(TEMPO_TRAT_DIAS, EVENTO_TRAT) ~ FAIXA_ETARIA + AP_SEXO + AP_RACACOR + AM_TRANSPL,
   data = base_sobrevida
 )
 summary_modelo_cox <- summary(modelo_cox)
@@ -484,4 +484,3 @@ conteudo_md_summaries <- c(
   "```"
 )
 writeLines(conteudo_md_summaries, file.path(pasta_saida_modelos, "summaries_modelos_aula7.md"))
-

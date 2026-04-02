@@ -165,8 +165,10 @@ Call: survfit(formula = obj_surv ~ AP_RACACOR, data = base_sobrevida)
   700   1018      32    0.952 0.006298        0.940        0.964
 
                 AP_RACACOR=04 
-        time       n.risk      n.event     survival      std.err lower 95% CI upper 95% CI 
-    700.0000      68.0000       3.0000       0.9559       0.0249       0.9083       1.0000 
+        time       n.risk      n.event     survival      std.err lower 95% CI 
+    700.0000      68.0000       3.0000       0.9559       0.0249       0.9083 
+upper 95% CI 
+      1.0000 
 
                 AP_RACACOR=99 
  time n.risk n.event survival std.err lower 95% CI upper 95% CI
@@ -235,55 +237,35 @@ Call: survfit(formula = obj_surv ~ FAIXA_ETARIA, data = base_sobrevida)
 ```r
 Call:
 coxph(formula = Surv(TEMPO_TRAT_DIAS, EVENTO_TRAT) ~ FAIXA_ETARIA + 
-    AP_SEXO + AP_RACACOR + AM_TRANSPL + AP_CIDPRI, data = base_sobrevida)
+    AP_SEXO + AP_RACACOR + AM_TRANSPL, data = base_sobrevida)
 
   n= 4228, number of events= 110 
 
-                        coef  exp(coef)   se(coef)      z Pr(>|z|)  
-FAIXA_ETARIA20-40 -2.077e-01  8.125e-01  2.306e-01 -0.900   0.3679  
-FAIXA_ETARIA40-60 -3.285e-01  7.200e-01  2.792e-01 -1.177   0.2394  
-FAIXA_ETARIA60+   -3.376e-01  7.135e-01  4.592e-01 -0.735   0.4622  
-AP_SEXOFeminino    2.296e-01  1.258e+00  1.948e-01  1.179   0.2384  
-AP_RACACOR02       2.041e-01  1.226e+00  4.420e-01  0.462   0.6443  
-AP_RACACOR03       1.485e-01  1.160e+00  2.070e-01  0.717   0.4733  
-AP_RACACOR04      -2.030e-02  9.799e-01  6.006e-01 -0.034   0.9730  
-AP_RACACOR99      -5.789e-01  5.605e-01  5.997e-01 -0.965   0.3344  
-AM_TRANSPLSim             NA         NA  0.000e+00     NA       NA  
-AP_CIDPRIE101     -1.149e+00  3.171e-01  1.093e+00 -1.051   0.2932  
-AP_CIDPRIE102     -1.839e+00  1.589e-01  1.428e+00 -1.288   0.1976  
-AP_CIDPRIE103     -3.910e-01  6.763e-01  1.175e+00 -0.333   0.7392  
-AP_CIDPRIE104     -1.624e+01  8.847e-08  2.312e+03 -0.007   0.9944  
-AP_CIDPRIE105     -1.613e+01  9.869e-08  3.962e+03 -0.004   0.9968  
-AP_CIDPRIE106     -7.326e-01  4.807e-01  1.423e+00 -0.515   0.6066  
-AP_CIDPRIE107     -2.623e+00  7.259e-02  1.426e+00 -1.840   0.0658 .
-AP_CIDPRIE108     -1.318e+00  2.676e-01  1.045e+00 -1.262   0.2069  
-AP_CIDPRIE109     -1.939e+00  1.438e-01  1.021e+00 -1.900   0.0574 .
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+FAIXA_ETARIA20-40 -0.1066    0.8989   0.2235 -0.477    0.633
+FAIXA_ETARIA40-60 -0.1745    0.8398   0.2645 -0.660    0.509
+FAIXA_ETARIA60+   -0.0807    0.9225   0.4404 -0.183    0.855
+AP_SEXOFeminino    0.2374    1.2680   0.1936  1.226    0.220
+AP_RACACOR02       0.2090    1.2324   0.4380  0.477    0.633
+AP_RACACOR03       0.1190    1.1264   0.2063  0.577    0.564
+AP_RACACOR04      -0.1097    0.8961   0.5995 -0.183    0.855
+AP_RACACOR99      -0.5415    0.5819   0.5990 -0.904    0.366
+AM_TRANSPLSim          NA        NA   0.0000     NA       NA
 
                   exp(coef) exp(-coef) lower .95 upper .95
-FAIXA_ETARIA20-40 8.125e-01  1.231e+00  0.517006     1.277
-FAIXA_ETARIA40-60 7.200e-01  1.389e+00  0.416615     1.244
-FAIXA_ETARIA60+   7.135e-01  1.402e+00  0.290097     1.755
-AP_SEXOFeminino   1.258e+00  7.948e-01  0.858878     1.843
-AP_RACACOR02      1.226e+00  8.154e-01  0.515698     2.917
-AP_RACACOR03      1.160e+00  8.620e-01  0.773134     1.741
-AP_RACACOR04      9.799e-01  1.021e+00  0.301956     3.180
-AP_RACACOR99      5.605e-01  1.784e+00  0.173011     1.816
+FAIXA_ETARIA20-40    0.8989     1.1125    0.5800     1.393
+FAIXA_ETARIA40-60    0.8398     1.1907    0.5001     1.410
+FAIXA_ETARIA60+      0.9225     1.0840    0.3891     2.187
+AP_SEXOFeminino      1.2680     0.7886    0.8675     1.853
+AP_RACACOR02         1.2324     0.8114    0.5224     2.908
+AP_RACACOR03         1.1264     0.8878    0.7517     1.688
+AP_RACACOR04         0.8961     1.1160    0.2767     2.902
+AP_RACACOR99         0.5819     1.7186    0.1799     1.883
 AM_TRANSPLSim            NA         NA        NA        NA
-AP_CIDPRIE101     3.171e-01  3.154e+00  0.037233     2.700
-AP_CIDPRIE102     1.589e-01  6.293e+00  0.009678     2.609
-AP_CIDPRIE103     6.763e-01  1.479e+00  0.067666     6.760
-AP_CIDPRIE104     8.847e-08  1.130e+07  0.000000       Inf
-AP_CIDPRIE105     9.869e-08  1.013e+07  0.000000       Inf
-AP_CIDPRIE106     4.807e-01  2.080e+00  0.029564     7.815
-AP_CIDPRIE107     7.259e-02  1.378e+01  0.004438     1.187
-AP_CIDPRIE108     2.676e-01  3.737e+00  0.034533     2.073
-AP_CIDPRIE109     1.438e-01  6.953e+00  0.019458     1.063
 
-Concordance= 0.62  (se = 0.027 )
-Likelihood ratio test= 18.57  on 17 df,   p=0.4
-Wald test            = 20.22  on 17 df,   p=0.3
-Score (logrank) test = 22.9  on 17 df,   p=0.2
+Concordance= 0.565  (se = 0.027 )
+Likelihood ratio test= 3.83  on 8 df,   p=0.9
+Wald test            = 3.56  on 8 df,   p=0.9
+Score (logrank) test = 3.6  on 8 df,   p=0.9
 
 ```
